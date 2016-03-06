@@ -31,7 +31,7 @@ library(readr)
 library(RJSONIO)
 library(d3heatmap)
 
-LoadTransitData <- function() {
+LoadTransitData <- function(pkm = 0.195) {
   timemat <-
     read.csv("timematrix.csv", header = TRUE, stringsAsFactors = FALSE)
   stationnames <- timemat$Station
@@ -45,11 +45,11 @@ LoadTransitData <- function() {
       m3, symm = TRUE, Rowv = NULL, Colv = NULL, labRow = stationnames, labCol = stationnames
     )
   htmlwidgets::saveWidget(timeHeat, "timeheat.html", selfcontained = FALSE)
-  return(list(m3 = m3, timeHeat = timeHeat))
-}
+  # return(list(m3 = m3, timeHeat = timeHeat))
+# }
 
 
-LoadZones <- function() {
+# LoadZones <- function() {
   mz <-
     read.csv("zone_mat3.csv", header = FALSE, stringsAsFactors = FALSE)
   mz[mz == 0] <- NA
@@ -63,7 +63,7 @@ LoadZones <- function() {
   #htmlwidgets::saveWidget(timeHeat, "zoneheat.html", selfcontained = FALSE)
   
   ############
-  pkm <- 0.1955
+  # pkm <- 0.1955
   
   mzp <- mz
   mzp[mzp == 1] <- 2.75
@@ -81,5 +81,5 @@ LoadZones <- function() {
       mw, symm = TRUE, Rowv = NULL, Colv = NULL, labRow = stationnames, labCol = stationnames, na.rm = TRUE
     )
   htmlwidgets::saveWidget(pricediffheat, "pricediffheat.html", selfcontained = FALSE)
-  return(mw)
+  return(pricediffheat)
 }

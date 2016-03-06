@@ -4,7 +4,7 @@ library(shiny)
 shinyServer(function(input, output) {
   output$phonePlot <- renderPlot({
     # Render a barplot
-    
+    plot(LoadTransitData(input$price_input))
   })
   # Reactive expression to compose a data frame containing all of
   # the values
