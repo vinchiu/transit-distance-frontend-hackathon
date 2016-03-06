@@ -1,12 +1,12 @@
 {
-    "contents" : "library(shiny)\n\n# Define server logic for slider examples\nshinyServer(function(input, output) {\n  \n  # Reactive expression to compose a data frame containing all of\n  # the values\n  sliderValues <- reactive({\n    \n    # Compose data frame\n    data.frame(\n      Name = c(\"Integer\", \n               \"Decimal\",\n               \"Range\",\n               \"Custom Format\",\n               \"Animation\"),\n      Value = as.character(c(input$integer, \n                             input$decimal,\n                             paste(input$range, collapse=' '),\n                             input$format,\n                             input$animation)), \n      stringsAsFactors=FALSE)\n  }) \n  \n  # Show the values using an HTML table\n  output$values <- renderTable({\n    sliderValues()\n  })\n})",
+    "contents" : "library(shiny)\n\n# Define server logic for slider examples\nshinyServer(function(input, output) {\n  output$phonePlot <- renderPlot({\n    # Render a barplot\n    \n  })\n  # Reactive expression to compose a data frame containing all of\n  # the values\n  sliderValues <- reactive({\n    # Compose data frame\n    data.frame(\n      Name = c(\"price_input\"),\n      Value = as.character(c(input$decimal)),\n      stringsAsFactors = FALSE\n    )\n  })\n  \n  # Show the values using an HTML table\n  output$values <- renderTable({\n    sliderValues()\n  })\n})",
     "created" : 1457233078546.000,
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "885421780",
+    "hash" : "3366277871",
     "id" : "F23835CE",
-    "lastKnownWriteTime" : 1457233324,
+    "lastKnownWriteTime" : 1457234243,
     "path" : "~/hackathon/open-data-bc/shiny2/server.R",
     "project_path" : "server.R",
     "properties" : {

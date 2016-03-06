@@ -1,33 +1,85 @@
-library(tm)
-library(wordcloud)
-library(memoise)
+# stationnames <- c(
+#   'KING GEORGE STATION',
+#   'SURREY CENTRAL STATION',
+#   'GATEWAY STATION',
+#   'SCOTT ROAD STATION',
+#   'COLUMBIA STATION',
+#   'NEW WESTMINSTER STATION',
+#   '22ND STREET STATION',
+#   'EDMONDS STATION',
+#   'ROYAL OAK STATION',
+#   'METROTOWN STATION',
+#   'PATTERSON STATION',
+#   'JOYCE-COLLINGWOOD STATION',
+#   '29TH AVENUE STATION',
+#   'NANAIMO STATION',
+#   'COMMERCIAL-BROADWAY STATION PLATFORM 4',
+#   'MAIN STREET-SCIENCE WORLD STATION',
+#   'STADIUM-CHINATOWN STATION',
+#   'GRANVILLE STATION',
+#   'BURRARD STATION',
+#   'WATERFRONT STATION'
+# )
 
-# The list of valid books
-books <<- list("A Mid Summer Night's Dream" = "summer",
-               "The Merchant of Venice" = "merchant",
-               "Romeo and Juliet" = "romeo")
 
-# Using "memoise" to automatically cache the results
-getTermMatrix <- memoise(function(book) {
-  # Careful not to let just any name slip in here; a
-  # malicious user could manipulate this value.
-  if (!(book %in% books))
-    stop("Unknown book")
+
+
+
+library(dplyr)
+library(reshape2)
+library(readr)
+library(RJSONIO)
+library(d3heatmap)
+
+LoadTransitData <- function() {
+  timemat <-
+    read.csv("timematrix.csv", header = TRUE, stringsAsFactors = FALSE)
+  stationnames <- timemat$Station
   
-  text <- readLines(sprintf("./%s.txt.gz", book),
-                    encoding="UTF-8")
+  m3 <- data.matrix(timemat[,-1])
+  dimnames(m3)[[1]] <- stationnames
+  dimnames(m3)[[2]] <- stationnames
   
-  myCorpus = Corpus(VectorSource(text))
-  myCorpus = tm_map(myCorpus, content_transformer(tolower))
-  myCorpus = tm_map(myCorpus, removePunctuation)
-  myCorpus = tm_map(myCorpus, removeNumbers)
-  myCorpus = tm_map(myCorpus, removeWords,
-                    c(stopwords("SMART"), "thy", "thou", "thee", "the", "and", "but"))
+  timeHeat <-
+    d3heatmap(
+      m3, symm = TRUE, Rowv = NULL, Colv = NULL, labRow = stationnames, labCol = stationnames
+    )
+  htmlwidgets::saveWidget(timeHeat, "timeheat.html", selfcontained = FALSE)
+  return(list(m3 = m3, timeHeat = timeHeat))
+}
+
+
+LoadZones <- function() {
+  mz <-
+    read.csv("zone_mat3.csv", header = FALSE, stringsAsFactors = FALSE)
+  mz[mz == 0] <- NA
   
-  myDTM = TermDocumentMatrix(myCorpus,
-                             control = list(minWordLength = 1))
   
-  m = as.matrix(myDTM)
+  mz <- data.matrix(mz)
+  dimnames(mz)[[1]] <- stationnames
+  dimnames(mz)[[2]] <- stationnames
   
-  sort(rowSums(m), decreasing = TRUE)
-})
+  #timeHeat <- d3heatmap(mz, symm = TRUE, Rowv = NULL, Colv = NULL, labRow = stationnames, labCol = stationnames, na.rm = TRUE)
+  #htmlwidgets::saveWidget(timeHeat, "zoneheat.html", selfcontained = FALSE)
+  
+  ############
+  pkm <- 0.1955
+  
+  mzp <- mz
+  mzp[mzp == 1] <- 2.75
+  mzp[mzp == 2] <- 4.00
+  mzp[mzp == 3] <- 5.50
+  
+  mdp <- md
+  mdp <- round(mdp * pricekm,2)
+  
+  mw <- mdp - mzp
+  
+  
+  pricediffheat <-
+    d3heatmap(
+      mw, symm = TRUE, Rowv = NULL, Colv = NULL, labRow = stationnames, labCol = stationnames, na.rm = TRUE
+    )
+  htmlwidgets::saveWidget(pricediffheat, "pricediffheat.html", selfcontained = FALSE)
+  return(mw)
+}
