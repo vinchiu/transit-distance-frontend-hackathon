@@ -32,6 +32,7 @@ library(RJSONIO)
 library(d3heatmap)
 
 LoadTransitData <- function(pkm = 0.195) {
+  pricekm <- pkm
   timemat <-
     read.csv("timematrix.csv", header = TRUE, stringsAsFactors = FALSE)
   stationnames <- timemat$Station
@@ -58,6 +59,15 @@ LoadTransitData <- function(pkm = 0.195) {
   mz <- data.matrix(mz)
   dimnames(mz)[[1]] <- stationnames
   dimnames(mz)[[2]] <- stationnames
+  
+  md <-
+    read.csv("distances3.csv", header = FALSE, stringsAsFactors = FALSE)
+  md[md == 0] <- NA
+  
+  
+  md <- data.matrix(md)
+  dimnames(md)[[1]] <- stationnames
+  dimnames(md)[[2]] <- stationnames
   
   #timeHeat <- d3heatmap(mz, symm = TRUE, Rowv = NULL, Colv = NULL, labRow = stationnames, labCol = stationnames, na.rm = TRUE)
   #htmlwidgets::saveWidget(timeHeat, "zoneheat.html", selfcontained = FALSE)
