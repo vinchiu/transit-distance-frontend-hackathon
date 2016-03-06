@@ -1,8 +1,11 @@
 library(shiny)
+library(png)
+# img = readPNG("chart.png")
 
 # Define server logic for slider examples
 shinyServer(function(input, output) {
-  output$phonePlot <- renderPlot({
+  output$phonePlot <- 
+    renderPlot({
     # Render a barplot
   LoadTransitData(input$price_input)
   })
