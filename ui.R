@@ -4,7 +4,7 @@ library(shiny)
 shinyUI(fluidPage(
   
   #  Application title
-  titlePanel("Sliders"),
+  titlePanel("Transit App"),
   
   # Sidebar with sliders that demonstrate various available
   # options
@@ -12,7 +12,7 @@ shinyUI(fluidPage(
     sidebarPanel(
       #price value input
       sliderInput("price_input", "price_input:", 
-                  min = 0, max = 1, value = 0.5, step= 0.1)
+                  min = 0, max = 3, value = 0.5, step= 0.1)
       
 #       # Simple integer interval
 #       sliderInput("integer", "Integer:", 
