@@ -1,12 +1,12 @@
 {
-    "contents" : "fluidPage(\n  # Application title\n  titlePanel(\"Word Cloud\"),\n  \n  sidebarLayout(\n    # Sidebar with a slider and selection inputs\n    sidebarPanel(\n      selectInput(\"selection\", \"Choose a book:\",\n                  choices = books),\n      actionButton(\"update\", \"Change\"),\n      hr(),\n      sliderInput(\"freq\",\n                  \"Minimum Frequency:\",\n                  min = 1,  max = 50, value = 15),\n      sliderInput(\"max\",\n                  \"Maximum Number of Words:\",\n                  min = 1,  max = 300,  value = 100)\n    ),\n    \n    # Show Word Cloud\n    mainPanel(\n      plotOutput(\"plot\")\n    )\n  )\n)\n",
+    "contents" : "library(shiny)\n\n# Define UI for slider demo application\nshinyUI(fluidPage(\n  \n  #  Application title\n  titlePanel(\"Sliders\"),\n  \n  # Sidebar with sliders that demonstrate various available\n  # options\n  sidebarLayout(\n    sidebarPanel(\n      # Simple integer interval\n      sliderInput(\"integer\", \"Integer:\", \n                  min=0, max=1000, value=500),\n      \n      # Decimal interval with step value\n      sliderInput(\"decimal\", \"Decimal:\", \n                  min = 0, max = 1, value = 0.5, step= 0.1),\n      \n      # Specification of range within an interval\n      sliderInput(\"range\", \"Range:\",\n                  min = 1, max = 1000, value = c(200,500)),\n      \n      # Provide a custom currency format for value display, \n      # with basic animation\n      sliderInput(\"format\", \"Custom Format:\", \n                  min = 0, max = 10000, value = 0, step = 2500,\n                  format=\"$#,##0\", locale=\"us\", animate=TRUE),\n      \n      # Animation with custom interval (in ms) to control speed,\n      # plus looping\n      sliderInput(\"animation\", \"Looping Animation:\", 1, 2000, 1,\n                  step = 10, animate=\n                    animationOptions(interval=300, loop=TRUE))\n    ),\n    \n    # Show a table summarizing the values entered\n    mainPanel(\n      tableOutput(\"values\")\n    )\n  )\n))",
     "created" : 1457233064212.000,
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "3224001688",
+    "hash" : "497898367",
     "id" : "3D47D32C",
-    "lastKnownWriteTime" : 1457233119,
+    "lastKnownWriteTime" : 1457233349,
     "path" : "~/hackathon/open-data-bc/shiny2/ui.R",
     "project_path" : "ui.R",
     "properties" : {

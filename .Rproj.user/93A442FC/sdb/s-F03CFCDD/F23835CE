@@ -1,12 +1,12 @@
 {
-    "contents" : "# Text of the books downloaded from:\n# A Mid Summer Night's Dream:\n#  http://www.gutenberg.org/cache/epub/2242/pg2242.txt\n# The Merchant of Venice:\n#  http://www.gutenberg.org/cache/epub/2243/pg2243.txt\n# Romeo and Juliet:\n#  http://www.gutenberg.org/cache/epub/1112/pg1112.txt\n\nfunction(input, output, session) {\n  # Define a reactive expression for the document term matrix\n  terms <- reactive({\n    # Change when the \"update\" button is pressed...\n    input$update\n    # ...but not for anything else\n    isolate({\n      withProgress({\n        setProgress(message = \"Processing corpus...\")\n        getTermMatrix(input$selection)\n      })\n    })\n  })\n  \n  # Make the wordcloud drawing predictable during a session\n  wordcloud_rep <- repeatable(wordcloud)\n  \n  output$plot <- renderPlot({\n    v <- terms()\n    wordcloud_rep(names(v), v, scale=c(4,0.5),\n                  min.freq = input$freq, max.words=input$max,\n                  colors=brewer.pal(8, \"Dark2\"))\n  })\n}",
+    "contents" : "library(shiny)\n\n# Define server logic for slider examples\nshinyServer(function(input, output) {\n  \n  # Reactive expression to compose a data frame containing all of\n  # the values\n  sliderValues <- reactive({\n    \n    # Compose data frame\n    data.frame(\n      Name = c(\"Integer\", \n               \"Decimal\",\n               \"Range\",\n               \"Custom Format\",\n               \"Animation\"),\n      Value = as.character(c(input$integer, \n                             input$decimal,\n                             paste(input$range, collapse=' '),\n                             input$format,\n                             input$animation)), \n      stringsAsFactors=FALSE)\n  }) \n  \n  # Show the values using an HTML table\n  output$values <- renderTable({\n    sliderValues()\n  })\n})",
     "created" : 1457233078546.000,
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "537500676",
+    "hash" : "885421780",
     "id" : "F23835CE",
-    "lastKnownWriteTime" : 1457233100,
+    "lastKnownWriteTime" : 1457233324,
     "path" : "~/hackathon/open-data-bc/shiny2/server.R",
     "project_path" : "server.R",
     "properties" : {

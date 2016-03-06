@@ -1,32 +1,29 @@
-# Text of the books downloaded from:
-# A Mid Summer Night's Dream:
-#  http://www.gutenberg.org/cache/epub/2242/pg2242.txt
-# The Merchant of Venice:
-#  http://www.gutenberg.org/cache/epub/2243/pg2243.txt
-# Romeo and Juliet:
-#  http://www.gutenberg.org/cache/epub/1112/pg1112.txt
+library(shiny)
 
-function(input, output, session) {
-  # Define a reactive expression for the document term matrix
-  terms <- reactive({
-    # Change when the "update" button is pressed...
-    input$update
-    # ...but not for anything else
-    isolate({
-      withProgress({
-        setProgress(message = "Processing corpus...")
-        getTermMatrix(input$selection)
-      })
-    })
-  })
+# Define server logic for slider examples
+shinyServer(function(input, output) {
   
-  # Make the wordcloud drawing predictable during a session
-  wordcloud_rep <- repeatable(wordcloud)
+  # Reactive expression to compose a data frame containing all of
+  # the values
+  sliderValues <- reactive({
+    
+    # Compose data frame
+    data.frame(
+      Name = c("Integer", 
+               "Decimal",
+               "Range",
+               "Custom Format",
+               "Animation"),
+      Value = as.character(c(input$integer, 
+                             input$decimal,
+                             paste(input$range, collapse=' '),
+                             input$format,
+                             input$animation)), 
+      stringsAsFactors=FALSE)
+  }) 
   
-  output$plot <- renderPlot({
-    v <- terms()
-    wordcloud_rep(names(v), v, scale=c(4,0.5),
-                  min.freq = input$freq, max.words=input$max,
-                  colors=brewer.pal(8, "Dark2"))
+  # Show the values using an HTML table
+  output$values <- renderTable({
+    sliderValues()
   })
-}
+})
